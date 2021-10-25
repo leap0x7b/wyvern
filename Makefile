@@ -1,3 +1,7 @@
+ifeq (,$(filter $(TARGET),rpi3 rpi4 qemu-virt))
+$(error Invalid target: $(TARGET))
+endif
+
 TARGET := rpi3
 
 CC := clang -target aarch64-elf
@@ -25,8 +29,16 @@ build/$(TARGET)/%.s.o: src/%.s
 build/$(TARGET)/%.o: src/%.c
 	$(CC) $(CFLAGS) $(CHARDFLAGS) -c $< -o $@
 
-run: $(TARGET)
-	qemu-system-aarch64 -machine raspi3 -kernel build/kernel-$(<).elf -serial stdio
+run: $(TARGET) run-$(TARGET)
+
+run-rpi3:
+	qemu-system-aarch64 -machine raspi3 -kernel build/kernel-rpi3.elf -serial stdio
+
+run-rpi4:
+	$(error QEMU currently doesn't support Raspberry Pi 4. You might need to run the kernel on real hardware)
+
+run-qemu-virt:
+	qemu-system-aarch64 -machine virt -cpu cortex-a57 -kernel build/kernel-qemu-virt.elf -serial stdio
 
 clean:
 	$(RM)r build
