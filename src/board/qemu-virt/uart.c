@@ -2,7 +2,7 @@
 
 volatile uint32_t* UART0 = (uint32_t*)0x09000000;
 
-void uart_init(void) {}
+void uart_init(void) { }
 
 void uart_putc(char c) { *UART0 = c; }
 

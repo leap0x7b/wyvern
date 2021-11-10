@@ -16,7 +16,7 @@ void uart_init(void)
 
     mmio_write(UART0_ICR, 0x7FF);
 
-    volatile uint32_t r = (((volatile uint32_t)&mailbox & ~0xF) | 8);
+    volatile uint32_t r = (((volatile uint32_t) & mailbox & ~0xF) | 8);
     while (mmio_read(MBOX_STATUS) & 0x80000000)
         ;
     mmio_write(MBOX_WRITE, r);

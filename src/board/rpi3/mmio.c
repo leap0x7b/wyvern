@@ -15,5 +15,4 @@ void delay(int32_t count)
                  : "cc");
 }
 
-volatile uint32_t mailbox[36]
-    = { 9 * 4, 0, 0x38002, 12, 8, 2, 4000000, 0, 0 };
+volatile uint32_t mailbox[36] = { 9 * 4, 0, 0x38002, 12, 8, 2, 4000000, 0, 0 };
