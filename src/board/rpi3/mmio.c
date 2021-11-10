@@ -1,11 +1,6 @@
 #include "mmio.h"
 
-volatile uint32_t MMIO_BASE = 0x3F000000;
-
-uint32_t mmio_read(uint32_t reg)
-{
-    return *((volatile uint32_t*)MMIO_BASE + reg);
-}
+uint32_t mmio_read(uint32_t reg) { return *((volatile uint32_t*)MMIO_BASE + reg); }
 
 void mmio_write(uint32_t reg, uint32_t data)
 {
@@ -14,10 +9,11 @@ void mmio_write(uint32_t reg, uint32_t data)
 
 void delay(int32_t count)
 {
-	asm volatile("__delay_%=: subs %[count], %[count], #1; bne __delay_%=\n"
-		 : "=r"(count): [count]"0"(count) : "cc");
+    asm volatile("__delay_%=: subs %[count], %[count], #1; bne __delay_%=\n"
+                 : "=r"(count)
+                 : [count] "0"(count)
+                 : "cc");
 }
 
-volatile uint32_t  __attribute__((aligned(16))) mailbox[9] = {
-    9*4, 0, 0x38002, 12, 8, 2, 3000000, 0, 0
-};
+volatile uint32_t mailbox[36]
+    = { 9 * 4, 0, 0x38002, 12, 8, 2, 4000000, 0, 0 };

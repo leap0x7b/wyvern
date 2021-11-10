@@ -1,12 +1,13 @@
+TARGET := rpi3
+
 ifeq (,$(filter $(TARGET),rpi3 rpi4 qemu-virt))
 $(error Invalid target: $(TARGET))
 endif
 
-TARGET := rpi3
-
 CC := clang -target aarch64-elf
 LD := ld.lld
 AS := $(CC)
+OBJCOPY := llvm-objcopy
 
 CFLAGS := -O0 -g
 CHARDFLAGS := -nostdlib -ffreestanding -fno-stack-protector -Isrc -Isrc/board/$(TARGET)
@@ -32,7 +33,8 @@ build/$(TARGET)/%.o: src/%.c
 run: $(TARGET) run-$(TARGET)
 
 run-rpi3:
-	qemu-system-aarch64 -machine raspi3 -kernel build/kernel-rpi3.elf -serial stdio
+	$(OBJCOPY) -O binary build/kernel-rpi3.elf build/kernel8.img
+	qemu-system-aarch64 -machine raspi3 -kernel build/kernel8.img -serial stdio
 
 run-rpi4:
 	$(error QEMU currently doesn't support Raspberry Pi 4. You might need to run the kernel on real hardware)
